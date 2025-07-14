@@ -1,4 +1,4 @@
-package sravan.project.todolistproject.ui.theme
+package s3399241.akshay.todolistproject.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

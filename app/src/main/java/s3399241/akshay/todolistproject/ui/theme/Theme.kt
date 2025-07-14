@@ -1,6 +1,5 @@
-package sravan.project.todolistproject.ui.theme
+package s3399241.akshay.todolistproject.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

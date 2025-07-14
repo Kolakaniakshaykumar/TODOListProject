@@ -1,4 +1,4 @@
-package sravan.project.todolistproject
+package s3399241.akshay.todolistproject
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

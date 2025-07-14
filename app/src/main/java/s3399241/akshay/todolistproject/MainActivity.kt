@@ -1,4 +1,4 @@
-package sravan.project.todolistproject
+package s3399241.akshay.todolistproject
 
 import android.app.Activity
 import android.content.Intent
@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,7 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import sravan.project.todolistproject.ui.theme.TODOListProjectTheme
+import s3399241.akshay.todolistproject.ui.theme.TODOListProjectTheme
 
 
 class MainActivity : ComponentActivity() {
@@ -104,7 +103,7 @@ fun StartUpView() {
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Text(
-                        text = "ToDO List App\nby Sarvan",
+                        text = "ToDO List App\nby Akshay",
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF64A70B), // Green color similar to the design
                         fontSize = 26.sp,

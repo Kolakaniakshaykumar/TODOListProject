@@ -1,12 +1,12 @@
-package sravan.project.todolistproject
+package s3399241.akshay.todolistproject
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,8 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.database.FirebaseDatabase
 
 
 class SignInActivity : ComponentActivity() {
@@ -157,6 +156,7 @@ fun UserLogin() {
                             }
 
                             else -> {
+                                signInWithuseremail(email, password, context)
                             }
 
                         }
@@ -181,6 +181,8 @@ fun UserLogin() {
                     modifier = Modifier
                         .clickable {
 
+                             context.startActivity(Intent(context, SignUpActivity::class.java))
+                            context.finish()
                         }
                         .align(Alignment.CenterHorizontally)
                 )
@@ -198,4 +200,45 @@ fun UserLogin() {
 @Composable
 fun UserLoginPreview() {
     UserLogin()
+}
+
+private fun signInWithuseremail(useremail: String, userpassword: String, context: Activity) {
+    val db = FirebaseDatabase.getInstance()
+    val sanitizedUid = useremail.replace(".", ",")
+    val ref = db.getReference("Users").child(sanitizedUid)
+
+    ref.get().addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val userData = task.result?.getValue(UserData::class.java)
+            if (userData != null) {
+                if (userData.password == userpassword) {
+                    //Save User Details
+                    saveUserDetails(userData, context)
+//                    UserDetails.saveUserLoginStatus(context,true)
+//                    UserDetails.saveEmail(context,useremail)
+                    context.startActivity(Intent(context, DashboardActivity::class.java))
+                    context.finish()
+
+                    Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Invalid Password", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(context, "No user data found", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // Data retrieval failed
+            Toast.makeText(
+                context,
+                "Failed to retrieve user data: ${task.exception?.message}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+}
+
+fun saveUserDetails(user: UserData, context: Context) {
+//    UserDetails.saveUserLoginStatus(context = context, true)
+//    UserDetails.saveName(context, user.fullName)
+//    UserDetails.saveEmail(context, user.email)
 }

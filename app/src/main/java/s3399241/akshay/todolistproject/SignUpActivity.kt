@@ -1,4 +1,4 @@
-package sravan.project.todolistproject
+package s3399241.akshay.todolistproject
 
 import android.app.Activity
 import android.content.Intent
@@ -41,6 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.database.FirebaseDatabase
 
 class SignUpActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -177,6 +178,13 @@ fun TodoListRegister() {
 
                         else -> {
 
+                            val userData = UserData(
+                                fullName = fullname,
+                                gender = "Male",
+                                email = email,
+                                password = password
+                            )
+                            doesUserExits(userData,context)
                         }
 
                     }
@@ -219,3 +227,73 @@ fun TodoListRegister() {
     }
 }
 
+private fun doesUserExits(userData1: UserData, context: Activity) {
+    val db = FirebaseDatabase.getInstance()
+    val sanitizedUid = userData1.email.replace(".", ",")
+    val ref = db.getReference("Users").child(sanitizedUid)
+
+    ref.get().addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val userData = task.result?.getValue(UserData::class.java)
+            if (userData != null) {
+                Toast.makeText(context, "User already exists", Toast.LENGTH_SHORT).show()
+            } else {
+                saveUserData(userData1,context)
+            }
+        } else {
+            // Data retrieval failed
+            Toast.makeText(
+                context,
+                "Failed to retrieve user data: ${task.exception?.message}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+}
+
+
+
+private fun saveUserData(userData: UserData, context: Activity) {
+    val db = FirebaseDatabase.getInstance()
+    val ref = db.getReference("Users")
+
+    ref.child(userData.email.replace(".", ",")).setValue(userData)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(context, "Registration Successful", Toast.LENGTH_SHORT).show()
+                context.startActivity(Intent(context, SignInActivity::class.java))
+                context.finish()
+
+            } else {
+                Toast.makeText(
+                    context,
+                    "User Registration Failed: ${task.exception?.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        .addOnFailureListener { exception ->
+            Toast.makeText(
+                context,
+                "User Registration Failed: ${exception.message}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+}
+
+fun isValidUsername(username: String): Boolean {
+    val regex = "^[a-zA-Z]+$".toRegex()
+    return !regex.matches(username)
+}
+
+fun isValidEmail(email: String): Boolean {
+    val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex()
+    return !emailRegex.matches(email)
+}
+
+data class UserData(
+    val fullName: String = "",
+    val gender: String = "",
+    val email: String = "",
+    val password: String = ""
+)
