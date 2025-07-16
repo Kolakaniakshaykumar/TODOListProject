@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +23,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -39,6 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.database.FirebaseDatabase
@@ -47,13 +50,13 @@ class SignUpActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TodoListRegister()
+//            TodoListRegister()
         }
     }
 }
 
 @Composable
-fun TodoListRegister() {
+fun TodoListRegister(onActionClicked: (clickType:Int) -> Unit) {
     var fullname by remember { mutableStateOf("") }
     var country by remember { mutableStateOf("") }
 
@@ -67,167 +70,193 @@ fun TodoListRegister() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = colorResource(id = R.color.color1))
+            .background(Color.Green)
             .padding(WindowInsets.systemBars.asPaddingValues())
     ) {
 
-        Image(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp),
-            painter = painterResource(id = R.drawable.logo_todolist),
-            contentDescription = "TodoList",
-        )
+
 
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background(color = colorResource(id = R.color.color1)) // Background color for the entire screen
-                .padding(16.dp), // Padding for the fields
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        brush = Brush.horizontalGradient(listOf(Color.Gray, Color.Gray)),
-                        shape = RoundedCornerShape(16.dp)
-                    ),
-                value = fullname,
-                onValueChange = { fullname = it },
-                label = { Text("Enter FullName") }
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        brush = Brush.horizontalGradient(listOf(Color.Gray, Color.Gray)),
-                        shape = RoundedCornerShape(16.dp)
-                    ),
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Enter Your Email") }
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        brush = Brush.horizontalGradient(listOf(Color.Gray, Color.Gray)),
-                        shape = RoundedCornerShape(16.dp)
-                    ),
-                value = country,
-                onValueChange = { country = it },
-                label = { Text("Enter Your Country") }
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        brush = Brush.horizontalGradient(listOf(Color.Gray, Color.Gray)),
-                        shape = RoundedCornerShape(16.dp)
-                    ),
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Enter Your Password") }
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        brush = Brush.horizontalGradient(listOf(Color.Gray, Color.Gray)),
-                        shape = RoundedCornerShape(16.dp)
-                    ),
-                value = confirmpassword,
-                onValueChange = { confirmpassword = it },
-                label = { Text("Confirm Password") }
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                onClick = {
-                    when {
-                        email.isEmpty() -> {
-                            Toast.makeText(context, " Please Enter Mail", Toast.LENGTH_SHORT).show()
-                        }
-                        fullname.isEmpty() -> {
-                            Toast.makeText(context, " Please Enter Name", Toast.LENGTH_SHORT).show()
-                        }
-
-                        country.isEmpty() -> {
-                            Toast.makeText(context, " Please Enter Country", Toast.LENGTH_SHORT).show()
-                        }
-                        password.isEmpty() -> {
-                            Toast.makeText(context, " Please Enter Password", Toast.LENGTH_SHORT).show()
-                        }
-
-                        else -> {
-
-                            val userData = UserData(
-                                fullName = fullname,
-                                gender = "Male",
-                                email = email,
-                                password = password
-                            )
-                            doesUserExits(userData,context)
-                        }
-
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(id = R.color.PureWhite),
-                    contentColor = colorResource(
-                        id = R.color.SkyBlue
-                    )
-                )
-            ) {
-                Text(text = "Sign Up", fontSize = 16.sp)
-            }
+                .fillMaxSize()
+                .padding(16.dp)
+        )
+        {
             Spacer(modifier = Modifier.weight(1f))
 
-            Row(
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                Text(text = "You are an old user ?", fontSize = 14.sp)
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "Sign In",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = colorResource(id = R.color.PureWhite),
-                    modifier = Modifier.clickable {
-                        context.startActivity(Intent(context, SignInActivity::class.java))
-                        context.finish()
-                    }
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+            )
+            {
+
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(64.dp),
+                    painter = painterResource(id = R.drawable.logo_todolist),
+                    contentDescription = "TodoList",
                 )
+
+
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp),
+                    value = fullname,
+                    onValueChange = { fullname = it },
+                    label = { Text("Enter FullName") }
+                )
+
+
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp),
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text("Enter Your Email") }
+                )
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp),
+                    value = country,
+                    onValueChange = { country = it },
+                    label = { Text("Enter Your Country") }
+                )
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp),
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text("Enter Your Password") }
+                )
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp),
+                    value = confirmpassword,
+                    onValueChange = { confirmpassword = it },
+                    label = { Text("Confirm Password") }
+                )
+
+                Spacer(modifier = Modifier.height(15.dp))
+
+                Button(
+                    onClick = {
+                        when {
+                            email.isEmpty() -> {
+                                Toast.makeText(context, " Please Enter Mail", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+
+                            fullname.isEmpty() -> {
+                                Toast.makeText(context, " Please Enter Name", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+
+                            country.isEmpty() -> {
+                                Toast.makeText(context, " Please Enter Country", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+
+                            password.isEmpty() -> {
+                                Toast.makeText(
+                                    context,
+                                    " Please Enter Password",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+
+                            else -> {
+
+                                val userData = UserData(
+                                    fullName = fullname,
+                                    gender = "Male",
+                                    email = email,
+                                    password = password
+                                )
+                                doesUserExits(userData, context,onActionClicked)
+                            }
+
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)
+                        .height(38.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
+                ) {
+                    Text(text = "Sign Up", fontSize = 16.sp)
+                }
+
+                Spacer(modifier = Modifier.height(15.dp))
+
+                // Forgot Password Text
+                Text(
+                    text = "Login",
+                    color = Color.Red,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                    modifier = Modifier
+                        .clickable {
+
+                            onActionClicked.invoke(2)
+//                            context.startActivity(Intent(context, SignInActivity::class.java))
+//                            context.finish()
+                        }
+                        .align(Alignment.CenterHorizontally)
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
         }
+        Spacer(modifier = Modifier.weight(1f))
+
+//        Row(
+//            modifier = Modifier.align(Alignment.CenterHorizontally)
+//        ) {
+//            Text(text = "You are an old user ?", fontSize = 14.sp)
+//            Spacer(modifier = Modifier.width(4.dp))
+//            Text(
+//                text = "Sign In",
+//                fontSize = 14.sp,
+//                fontWeight = FontWeight.Bold,
+//                color = colorResource(id = R.color.PureWhite),
+//                modifier = Modifier.clickable {
+//                    context.startActivity(Intent(context, SignInActivity::class.java))
+//                    context.finish()
+//                }
+//            )
+//        }
+//
+//        Spacer(modifier = Modifier.height(24.dp))
 
     }
+
 }
 
-private fun doesUserExits(userData1: UserData, context: Activity) {
+
+private fun doesUserExits(userData1: UserData, context: Activity,onActionClicked: (clickType:Int) -> Unit) {
     val db = FirebaseDatabase.getInstance()
     val sanitizedUid = userData1.email.replace(".", ",")
     val ref = db.getReference("Users").child(sanitizedUid)
@@ -238,7 +267,7 @@ private fun doesUserExits(userData1: UserData, context: Activity) {
             if (userData != null) {
                 Toast.makeText(context, "User already exists", Toast.LENGTH_SHORT).show()
             } else {
-                saveUserData(userData1,context)
+                saveUserData(userData1, context,onActionClicked)
             }
         } else {
             // Data retrieval failed
@@ -252,17 +281,17 @@ private fun doesUserExits(userData1: UserData, context: Activity) {
 }
 
 
-
-private fun saveUserData(userData: UserData, context: Activity) {
+private fun saveUserData(userData: UserData, context: Activity,onActionClicked: (clickType:Int) -> Unit) {
     val db = FirebaseDatabase.getInstance()
     val ref = db.getReference("Users")
 
     ref.child(userData.email.replace(".", ",")).setValue(userData)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                onActionClicked.invoke(1)
                 Toast.makeText(context, "Registration Successful", Toast.LENGTH_SHORT).show()
-                context.startActivity(Intent(context, SignInActivity::class.java))
-                context.finish()
+//                context.startActivity(Intent(context, SignInActivity::class.java))
+//                context.finish()
 
             } else {
                 Toast.makeText(

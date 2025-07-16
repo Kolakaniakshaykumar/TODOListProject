@@ -47,14 +47,14 @@ class SignInActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            UserLogin()
+//            UserLogin()
         }
     }
 }
 
 
 @Composable
-fun UserLogin() {
+fun UserLogin(onLoginSuccess: (type:Int) -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -156,7 +156,7 @@ fun UserLogin() {
                             }
 
                             else -> {
-                                signInWithuseremail(email, password, context)
+                                signInWithuseremail(email, password, context,onLoginSuccess)
                             }
 
                         }
@@ -181,8 +181,9 @@ fun UserLogin() {
                     modifier = Modifier
                         .clickable {
 
-                             context.startActivity(Intent(context, SignUpActivity::class.java))
-                            context.finish()
+                            onLoginSuccess.invoke(2)
+//                             context.startActivity(Intent(context, SignUpActivity::class.java))
+//                            context.finish()
                         }
                         .align(Alignment.CenterHorizontally)
                 )
@@ -199,10 +200,10 @@ fun UserLogin() {
 @Preview(showBackground = true)
 @Composable
 fun UserLoginPreview() {
-    UserLogin()
+//    UserLogin()
 }
 
-private fun signInWithuseremail(useremail: String, userpassword: String, context: Activity) {
+private fun signInWithuseremail(useremail: String, userpassword: String, context: Activity, onLoginSuccess: (type:Int) -> Unit) {
     val db = FirebaseDatabase.getInstance()
     val sanitizedUid = useremail.replace(".", ",")
     val ref = db.getReference("Users").child(sanitizedUid)
@@ -216,8 +217,10 @@ private fun signInWithuseremail(useremail: String, userpassword: String, context
                     saveUserDetails(userData, context)
 //                    UserDetails.saveUserLoginStatus(context,true)
 //                    UserDetails.saveEmail(context,useremail)
-                    context.startActivity(Intent(context, DashboardActivity::class.java))
-                    context.finish()
+
+                    onLoginSuccess.invoke(1)
+//                    context.startActivity(Intent(context, DashboardActivity::class.java))
+//                    context.finish()
 
                     Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
                 } else {
