@@ -76,4 +76,13 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.7.0") // Use the latest stable version
 
+    val room_version = "2.6.1" // Use the latest stable version
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    // Optional: Room Kotlin Extensions and Coroutines support
+    implementation("androidx.room:room-ktx:$room_version")
+
+    implementation(platform("androidx.compose:compose-bom:2024.06.00")) // Use the latest stable BOM
+    implementation("androidx.compose.material3:material3") // This is crucial for Material 3 components
+
 }

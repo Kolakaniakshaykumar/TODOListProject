@@ -55,7 +55,7 @@ class DashboardActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenDesign(
+fun HomeScreenDesign1(
     // Callbacks for navigation to different sections
     onMyTasksClick: () -> Unit = {},
     onRemindersClick: () -> Unit = {},
@@ -233,7 +233,7 @@ fun HomeScreenDesign(
 }
 
 @Composable
-fun RowScope.SummaryCard(
+fun RowScope.SummaryCard1(
     title: String,
     count: Int,
     icon: ImageVector,
@@ -281,7 +281,7 @@ fun RowScope.SummaryCard(
 }
 
 @Composable
-fun DashboardSectionCard(
+fun DashboardSectionCard1(
     title: String,
     description: String,
     icon: ImageVector,
@@ -339,5 +339,5 @@ fun DashboardSectionCard(
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeScreenDesign() {
-    HomeScreenDesign()
+//    HomeScreenDesign()
 }

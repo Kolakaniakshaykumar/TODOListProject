@@ -43,9 +43,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import s3399241.akshay.todolistproject.ui.theme.TODOListProjectTheme
 
@@ -62,286 +59,97 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun MyAppNavGraph() {
-    val navController = rememberNavController()
-
-    NavHost(
-        navController = navController,
-        startDestination = AppDestinations.Splash.route // Start with the splash screen
-    ) {
-        // 1. Splash Screen Destination
-        composable(AppDestinations.Splash.route) {
-            SplashScreen(navController = navController)
-        }
-
-        // 2. Login Screen Destination
-        composable(AppDestinations.Login.route) {
-            UserLogin(
-                onLoginSuccess = {
-                    // Navigate to Home and pop up to Login screen (and including it)
-                    // This prevents the user from going back to Login after successful login
-                    if(it==1) {
-                        navController.navigate(AppDestinations.Home.route) {
-                            popUpTo(AppDestinations.Login.route) {
-                                inclusive = true // Remove Login from back stack
-                            }
-                        }
-                    }else{
-                        navController.navigate(AppDestinations.Register.route) {
-                            popUpTo(AppDestinations.Login.route) {
-                                inclusive = false // Remove Login from back stack
-                            }
-                        }
-                    }
-                }
-            )
-        }
-
-        composable(AppDestinations.Register.route)
-        {
-            TodoListRegister(
-                onActionClicked = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
-        // 3. Home Screen Destination (Dashboard)
-        composable(AppDestinations.Home.route) {
-            HomeScreenDesign(
-                onMyTasksClick = { navController.navigate(AppDestinations.MyTasks.route) },
-                onRemindersClick = { navController.navigate(AppDestinations.Reminders.route) },
-                onCompletedListsClick = { navController.navigate(AppDestinations.CompletedLists.route) },
-                onHistoryClick = { navController.navigate(AppDestinations.History.route) },
-                onQuickAddTaskClick = { navController.navigate(AppDestinations.AddTask.route) },
-                onSettingsClick = { navController.navigate(AppDestinations.Settings.route) }
-            )
-        }
-
-        // 4. My Tasks Screen
-        composable(AppDestinations.MyTasks.route) {
-            MyTasksScreen(navController = navController)
-        }
-
-        // 5. Reminders Screen
-        composable(AppDestinations.Reminders.route) {
-            RemindersScreen(navController = navController)
-        }
-
-        // 6. Completed Lists Screen
-        composable(AppDestinations.CompletedLists.route) {
-            CompletedListsScreen(navController = navController)
-        }
-
-        // 7. History Screen
-        composable(AppDestinations.History.route) {
-            HistoryScreen(navController = navController)
-        }
-
-        // 8. Add Task Screen
-        composable(AppDestinations.AddTask.route) {
-            AddTaskScreen(navController = navController)
-        }
-
-        // 9. Settings Screen
-        composable(AppDestinations.Settings.route) {
-            SettingsScreen(navController = navController)
-        }
-    }
-}
+//@Composable
+//fun MyAppNavGraph1() {
+//    val navController = rememberNavController()
+//
+//    NavHost(
+//        navController = navController,
+//        startDestination = AppDestinations.Splash.route // Start with the splash screen
+//    ) {
+//        // 1. Splash Screen Destination
+//        composable(AppDestinations.Splash.route) {
+//            SplashScreen(navController = navController)
+//        }
+//
+//        // 2. Login Screen Destination
+//        composable(AppDestinations.Login.route) {
+//            UserLogin(
+//                onLoginSuccess = {
+//                    // Navigate to Home and pop up to Login screen (and including it)
+//                    // This prevents the user from going back to Login after successful login
+//                    if(it==1) {
+//                        navController.navigate(AppDestinations.Home.route) {
+//                            popUpTo(AppDestinations.Login.route) {
+//                                inclusive = true // Remove Login from back stack
+//                            }
+//                        }
+//                    }else{
+//                        navController.navigate(AppDestinations.Register.route) {
+//                            popUpTo(AppDestinations.Login.route) {
+//                                inclusive = false // Remove Login from back stack
+//                            }
+//                        }
+//                    }
+//                }
+//            )
+//        }
+//
+//        composable(AppDestinations.Register.route)
+//        {
+//            TodoListRegister(
+//                onActionClicked = {
+//                    navController.popBackStack()
+//                }
+//            )
+//        }
+//
+//        // 3. Home Screen Destination (Dashboard)
+//        composable(AppDestinations.Home.route) {
+//            HomeScreenDesign(
+//                onMyTasksClick = { navController.navigate(AppDestinations.MyTasks.route) },
+//                onRemindersClick = { navController.navigate(AppDestinations.Reminders.route) },
+//                onCompletedListsClick = { navController.navigate(AppDestinations.CompletedLists.route) },
+//                onHistoryClick = { navController.navigate(AppDestinations.History.route) },
+//                onQuickAddTaskClick = { navController.navigate(AppDestinations.AddTask.route) },
+//                onSettingsClick = { navController.navigate(AppDestinations.Settings.route) }
+//            )
+//        }
+//
+//        // 4. My Tasks Screen
+//        composable(AppDestinations.MyTasks.route) {
+//            MyTasksScreen(navController = navController)
+//        }
+//
+//        // 5. Reminders Screen
+//        composable(AppDestinations.Reminders.route) {
+//            RemindersScreen(navController = navController)
+//        }
+//
+//        // 6. Completed Lists Screen
+//        composable(AppDestinations.CompletedLists.route) {
+//            CompletedListsScreen(navController = navController)
+//        }
+//
+//        // 7. History Screen
+//        composable(AppDestinations.History.route) {
+//            HistoryScreen(navController = navController)
+//        }
+//
+//        // 8. Add Task Screen
+//        composable(AppDestinations.AddTask.route) {
+//            AddTaskScreen(navController = navController)
+//        }
+//
+//        // 9. Settings Screen
+//        composable(AppDestinations.Settings.route) {
+//            SettingsScreen(navController = navController)
+//        }
+//    }
+//}
 
 // --- Placeholder Composables for other screens ---
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyTasksScreen(navController: NavController) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("My Tasks") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .wrapContentSize(Alignment.Center)
-        ) {
-            Text("My Tasks Content Here")
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun RemindersScreen(navController: NavController) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Reminders") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .wrapContentSize(Alignment.Center)
-        ) {
-            Text("Reminders Content Here")
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CompletedListsScreen(navController: NavController) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Completed Lists") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .wrapContentSize(Alignment.Center)
-        ) {
-            Text("Completed Lists Content Here")
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HistoryScreen(navController: NavController) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("History") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .wrapContentSize(Alignment.Center)
-        ) {
-            Text("History Content Here")
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AddTaskScreen(navController: NavController) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Add New Task") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .wrapContentSize(Alignment.Center)
-        ) {
-            Text("Add Task Form Here")
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SettingsScreen(navController: NavController) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Settings") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .wrapContentSize(Alignment.Center)
-        ) {
-            Text("Settings Content Here")
-        }
-    }
-}
-
-// --- SplashScreen (from previous response) ---
-@Composable
-fun SplashScreen(navController: NavController) {
-    LaunchedEffect(Unit) {
-        delay(3000) // Delay for 3 seconds
-        navController.navigate(AppDestinations.Login.route) {
-            popUpTo(AppDestinations.Splash.route) { inclusive = true }
-        }
-    }
-    StartUpView() // Your actual splash screen UI
-}
-
-
-//Old Code
-
-@Composable
-fun StartUpViewScreen() {
-    var canSplash by remember { mutableStateOf(true) }
-    val context = LocalContext.current as Activity
-
-    LaunchedEffect(Unit) {
-        delay(3000)
-        canSplash = false
-    }
-
-    if (canSplash) {
-        StartUpView()
-
-    } else {
-        context.startActivity(Intent(context, SignInActivity::class.java))
-        context.finish()
-    }
-}
 
 @Composable
 fun StartUpView() {

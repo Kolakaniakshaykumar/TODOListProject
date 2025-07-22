@@ -56,7 +56,7 @@ class SignUpActivity : ComponentActivity() {
 }
 
 @Composable
-fun TodoListRegister(onActionClicked: (clickType:Int) -> Unit) {
+fun TodoListRegister1(onActionClicked: (clickType:Int) -> Unit) {
     var fullname by remember { mutableStateOf("") }
     var country by remember { mutableStateOf("") }
 
