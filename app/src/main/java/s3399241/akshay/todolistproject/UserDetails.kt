@@ -4,7 +4,7 @@ import android.content.Context
 
 object UserDetails {
 
-    private const val PREFS_NAME = "CharityDonationApp"
+    private const val PREFS_NAME = "TODOListApp"
 
     fun saveUserLoginStatus(context: Context, value: Boolean) {
         val sharedPref = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

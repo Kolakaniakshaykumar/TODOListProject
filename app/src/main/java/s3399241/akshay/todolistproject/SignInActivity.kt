@@ -42,16 +42,6 @@ import androidx.compose.ui.unit.sp
 import com.google.firebase.database.FirebaseDatabase
 
 
-class SignInActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-//            UserLogin()
-        }
-    }
-}
-
 
 @Composable
 fun UserLogin(onLoginSuccess: (type:Int) -> Unit) {
@@ -85,9 +75,9 @@ fun UserLogin(onLoginSuccess: (type:Int) -> Unit) {
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally)
             )
-            { // Logo (replace with acorn image resource if you have one)
+            {
                 Image(
-                    painter = painterResource(id = R.drawable.logo_todolist), // Replace with your drawable resource
+                    painter = painterResource(id = R.drawable.logo_todolist),
                     contentDescription = "App Logo",
                     modifier = Modifier
                         .size(64.dp)
@@ -100,7 +90,7 @@ fun UserLogin(onLoginSuccess: (type:Int) -> Unit) {
                 Text(
                     text = "Login To TODO List App",
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF64A70B), // Green color similar to the design
+                    color = Color(0xFF64A70B),
                     fontSize = 20.sp,
                     style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -139,8 +129,6 @@ fun UserLogin(onLoginSuccess: (type:Int) -> Unit) {
                 // Login Button
                 Button(
                     onClick = {
-                        // context.startActivity(Intent(context, StocksActivity::class.java))
-                        //context.finish()
                         when {
                             email.isEmpty() -> {
                                 Toast.makeText(context, " Please Enter Mail", Toast.LENGTH_SHORT)
@@ -180,10 +168,7 @@ fun UserLogin(onLoginSuccess: (type:Int) -> Unit) {
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier
                         .clickable {
-
                             onLoginSuccess.invoke(2)
-//                             context.startActivity(Intent(context, SignUpActivity::class.java))
-//                            context.finish()
                         }
                         .align(Alignment.CenterHorizontally)
                 )
@@ -197,11 +182,7 @@ fun UserLogin(onLoginSuccess: (type:Int) -> Unit) {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun UserLoginPreview() {
-//    UserLogin()
-}
+
 
 private fun signInWithuseremail(useremail: String, userpassword: String, context: Activity, onLoginSuccess: (type:Int) -> Unit) {
     val db = FirebaseDatabase.getInstance()
@@ -213,15 +194,8 @@ private fun signInWithuseremail(useremail: String, userpassword: String, context
             val userData = task.result?.getValue(UserData::class.java)
             if (userData != null) {
                 if (userData.password == userpassword) {
-                    //Save User Details
                     saveUserDetails(userData, context)
-//                    UserDetails.saveUserLoginStatus(context,true)
-//                    UserDetails.saveEmail(context,useremail)
-
                     onLoginSuccess.invoke(1)
-//                    context.startActivity(Intent(context, DashboardActivity::class.java))
-//                    context.finish()
-
                     Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(context, "Invalid Password", Toast.LENGTH_SHORT).show()
